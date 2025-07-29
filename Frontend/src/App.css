@@ -1,0 +1,7 @@
+.custom_btn{
+  max-width: 200px ;
+  padding: 7px;
+  background-color: rgb(0, 102, 255);
+  color: rgb(248, 246, 246);
+  border-radius: 12px;
+} 
