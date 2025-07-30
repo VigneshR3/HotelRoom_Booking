@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -12,11 +12,30 @@ import Login from "./View/Pages/Login";
 import Register from "./View/Pages/Register";
 import { AdminProtecter } from "./Admin/AdminProtecter";
 import Home from "./View/Pages/Home";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { UserContext } from "./UserContext";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [User, setUser] = useState({});
+
+  useEffect(() => {
+    const token = Cookies.get("adminToken") || "";
+    try {
+      if (token) {
+        const decoded = jwtDecode(token);
+        console.log("Decoded token:", decoded);
+        setUser(decoded);
+      }
+    } catch (error) {
+      console.error("Token decode error:", error);
+    }
+  }, []); // ← run only once on mount
 
   return (
+    <UserContext.Provider value={{User,setUser}}>
+
     <BrowserRouter>
       <Routes>
         {/* Admin Routes */}
@@ -34,15 +53,12 @@ function App() {
         </Route>
 
         {/* Public/View Routes */}
-        <Route path="/" element={<ViewLayout />}>
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="*" element={<NotPage />} />
-        </Route>
+        <Route path="/" element={<Login />} />
       </Routes>
     </BrowserRouter>
+    </UserContext.Provider>
   );
 }
+
 
 export default App;

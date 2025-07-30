@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -6,9 +6,11 @@ import LoginSchema from "../../Schema/LoginShema";
 import { useFormik } from "formik";
 import { baseApi } from "../../BaseApi";
 import { jwtDecode } from "jwt-decode";
+import Cookies from 'js-cookie';
+import { UserContext } from "../../UserContext";
  
 function Login() {
-  
+  const {setUser} = useContext(UserContext)
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const notify = (message) => toast(message);
@@ -45,9 +47,10 @@ function Login() {
           console.log("response", resp);
           if (resp.status === 200) {
             const { token } = resp.data;
-            localStorage.setItem("adminToken",token)
+            Cookies.set("adminToken",token)
             const decode = jwtDecode(token);
             console.log("token",decode)
+            setUser(decode)
             // notify("Login Successfully");
           //   if (decode.role === "USER") {
           //     localStorage.setItem("userToken", token);

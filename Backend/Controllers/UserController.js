@@ -64,14 +64,15 @@ const UserLogin = async (req, res) => {
   }
 };
 const IsCheck_UserISAdmin = (req, res) => {
-  // console.log(req.cookies)
-  const { token } = req.cookies;
-  // console.lof("token",token)
+  console.log(req.headers.authorization)
+  const token = req.headers?.authorization.split(" ")[1]
+  // const { token } = req.cookies;
+  // console.log("token",token)
   try {
     const decode = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
-    // console.log("decode" , decode)
+    //  console.log("decode" , decode)
     if (decode) {
-      if (decode.data.role === "ADMIN") {
+      if (decode.role === "ADMIN") {
         res.status(200).json({ success: true, message: "Your Admin" });
       }
     }
