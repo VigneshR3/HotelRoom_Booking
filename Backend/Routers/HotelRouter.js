@@ -1,14 +1,14 @@
 // routes/hotel.js
 const express = require('express');
-const { NewHotelCreate, GetAllHotel, UpdateOneHotel, DeleteOneHotel } = require('../Controllers/HotelController');
+const { NewHotelCreate, GetAllHotel, UpdateOneHotel, DeleteOneHotel, FetchOneHotel } = require('../Controllers/HotelController');
 const Router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 // require('../../Frontend/public/uploads') 
 // Ensure uploads dir exists
- 
-const uploadDir = path.join(__dirname, '../../Frontend/public/', 'uploads'); // ← stable
+//  require("../uploads")
+const uploadDir = path.join(__dirname, '../uploads'); // ← stable
 fs.mkdirSync(uploadDir, { recursive: true });
 
 const storage = multer.diskStorage({
@@ -40,4 +40,5 @@ Router.post(
 Router.get('/get-all',GetAllHotel)
 Router.patch('/update/:id',UpdateOneHotel)
 Router.delete('/delete/:id',DeleteOneHotel)
+Router.get('/get-one/:id',FetchOneHotel)
 module.exports = Router;

@@ -31,7 +31,7 @@ const NewHotelCreate = async (req, res) => {
   } catch (error) {
     console.log(error);
     res
-      .status(200)
+      .status(400)
       .json({ success: false, message: "Faild ! File is not uploaded" });
   }
 };
@@ -102,7 +102,7 @@ const DeleteOneHotel = async (req, res) => {
 
     // 3. Delete each image file from /uploads/ directory
     allImages.forEach((filename) => {
-      const filePath = path.join(__dirname, '../../Frontend/public/uploads/',filename);
+      const filePath = path.join(__dirname, '../uploads',filename);
       fs.unlink(filePath, (err) => {
         if (err) {
           console.error(`Failed to delete image: ${filename}`, err);
@@ -119,4 +119,16 @@ const DeleteOneHotel = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error while deleting hotel" });
   }
 };
-module.exports = { NewHotelCreate, GetAllHotel, UpdateOneHotel ,DeleteOneHotel};
+const FetchOneHotel = async(req, res)=>{
+   try {
+    console.log(req.params)
+    const {id} =req.params
+    const hotel = await Hotel.findById(id)
+    return res.status(200).json({ success: true, message: "One Hotel Details Fetched",hotel });
+     
+   } catch (error) {
+    console.error("Delete error:", error);
+    return res.status(500).json({ success: false, message: "Server error while deleting hotel" });
+   }
+}
+module.exports = { NewHotelCreate, GetAllHotel, UpdateOneHotel ,DeleteOneHotel,FetchOneHotel};

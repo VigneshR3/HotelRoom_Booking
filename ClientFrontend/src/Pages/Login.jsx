@@ -2,17 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import LoginSchema from "../../Schema/LoginShema";
+import LoginSchema from "../Schema/LoginShema";
 import { useFormik } from "formik";
-import { baseApi } from "../../BaseApi";
+import { baseApi } from "../BaseApi";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import { UserContext } from "../../UserContext";
-import AppBar from "../../Admin/Components/Appbar";
-import "../../../node_modules/react-toastify/dist/ReactToastify.css";
+// import { UserContext } from "../../UserContext";
+// import AppBar from "../../Admin/Components/Appbar";
+// import "../../../node_modules/react-toastify/dist/ReactToastify.css";
+import { MyBookingContext } from "../MyBookingContext";
 
 function Login() {
-  const { setUser } = useContext(UserContext);
+  const { setUser, setForm } = useContext(MyBookingContext);
   const [error, setError] = useState("");
   const navigate = useNavigate();
   //   useEffect(() => {
@@ -34,14 +35,22 @@ function Login() {
         const resp = await axios.post(`${baseApi}/auth/login`, value, {
           withCredentials: true,
         });
+        console.log("login", resp);
         if (resp.status === 200) {
           const { token } = resp.data;
-          Cookies.set("adminToken", token);
           const decode = jwtDecode(token);
-          setUser(decode);
           if (decode.role === "ADMIN") {
+            setUser(decode);
             notify("Login Successfully");
-            setTimeout(() => navigate("/admin"), 1000); 
+            setTimeout(() => navigate("/admin"), 1000);
+          }
+          if (decode.role === "USER") {
+            Cookies.set("userToken", token);
+            setUser(decode);
+            setForm((pre) => ({ ...pre, email: decode.email }));
+            setForm((pre) => ({ ...pre, userid: decode.id }));
+            notify("Login Successfully");
+            setTimeout(() => navigate("/"), 1000);
           }
         }
       } catch (e) {
@@ -53,9 +62,12 @@ function Login() {
 
   return (
     <>
-      <AppBar />
-      <div className="flex  justify-center min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 "  >
-        <div className="w-full max-w-sm p-8 bg-white rounded-2xl shadow-lg backdrop-blur-lg" style={{maxHeight:400,marginTop:100}}>
+      {/* <AppBar /> */}
+      <div className="flex  justify-center min-h-screen bg-gradient-to-br from-blue-100 via-white to-purple-100 ">
+        <div
+          className="w-full max-w-sm p-8 bg-white rounded-2xl shadow-lg backdrop-blur-lg"
+          style={{ maxHeight: 400, marginTop: 10 }}
+        >
           {/* <ToastContainer /> */}
           <h2 className="text-2xl font-semibold text-center mb-6">Login</h2>
 
@@ -70,7 +82,6 @@ function Login() {
                 value={Formik.values.email}
                 onChange={Formik.handleChange}
                 onBlur={Formik.handleBlur}
-                
                 className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
               />

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import HotelCard from "../Components/HotelCardView";
-import SearchBar from "../components/SearchBar";
+// import SearchBar from "../components/SearchBar";
 import axios from "axios";
-import { baseApi } from "../../BaseApi";
+import { baseApi } from "../BaseApi";
 
 export default function Home() {
   const [hotelsData,setHotelData] = useState([])  

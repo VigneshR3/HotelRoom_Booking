@@ -76,6 +76,8 @@ const HotelRooms = () => {
   };
   const handleClose = () => {
     setShow(!isShow);
+    Formik.resetForm()
+    isEdit(false)
   };
   const InitialValues = {
     hotelname: "",
@@ -188,9 +190,11 @@ const HotelRooms = () => {
       .delete(`${baseApi}/hotel/delete/${id}`)
       .then((resp) => {
         console.log("response", resp);
-       GetAllHotelData()
+        GetAllHotelData();
       })
-      .catch((e) => {console.log("error",e)});
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
   return (
     <div className="w-full">
@@ -221,7 +225,11 @@ const HotelRooms = () => {
             marginTop: 10,
           }}
         >
-          <h3 style={{ textAlign: "center", margin: 2 }}>NEW HOTEL</h3>
+          {isEdit ? (
+            <h3 style={{ textAlign: "center", margin: 2 }}>Edit HOTEL</h3>
+          ) : (
+            <h3 style={{ textAlign: "center", margin: 2 }}>NEW HOTEL</h3>
+          )}
           <form onSubmit={Formik.handleSubmit} enctype="multipart/form-data">
             <div className="grid gap-4 px-4 py-2  ">
               {InputData.map((item, i) => {

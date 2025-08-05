@@ -6,8 +6,9 @@ import {
   ParkingCircle,
   PawPrint,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 // import imagepath from '../../../../Backend/uploads'
-const HotelCard = ({ hotel,HandleEdit,HandelDeleteOneHotel }) => {
+const HotelCardView = ({ hotel }) => {
   const {
     name,
     location,
@@ -26,11 +27,13 @@ const HotelCard = ({ hotel,HandleEdit,HandelDeleteOneHotel }) => {
     <div className="bg-white rounded-xl shadow-lg overflow-hidden w-full md:w-96 mx-auto border border-gray-200">
       {/* Hotel Image */}
       {/* Backend\uploads */}
+      <Link to={`details/${hotel._id}`}>
       <img
         src={`http://localhost:3000/uploads/${firstImage}`}
         alt={name}
         className="h-48 w-full object-cover"
       />
+      </Link>
 
       {/* Card Content */}
       <div className="p-4">
@@ -67,7 +70,7 @@ const HotelCard = ({ hotel,HandleEdit,HandelDeleteOneHotel }) => {
           )}
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-around",margin:5 }}>
+      {/* <div style={{ display: "flex", justifyContent: "space-around",margin:5 }}>
         <button
           style={{
             backgroundColor: " #b6d722ff",
@@ -88,9 +91,9 @@ const HotelCard = ({ hotel,HandleEdit,HandelDeleteOneHotel }) => {
             borderRadius: 10,
             width: 100,
           }}>Delete</button>
-      </div>
+      </div> */}
     </div>
   );
 };
 
-export default HotelCard;
+export default HotelCardView;

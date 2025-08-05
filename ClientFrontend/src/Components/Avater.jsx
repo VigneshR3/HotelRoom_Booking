@@ -1,12 +1,13 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
-import { UserContext } from "../../UserContext";
+// import { UserContext } from "../../UserContext";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { FaRegUser } from "react-icons/fa6";
+import { MyBookingContext } from "../MyBookingContext";
 
 const Avater = () => {
-  const { User, setUser } = useContext(UserContext);
+  const { User, setUser } = useContext(MyBookingContext);
   const { username } = User;
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Avater = () => {
   const notify = (e) =>
     toast.success(e, { autoClose: 1000, position: "top-right" });
   const handleLogout = () => {
-    Cookies.remove("adminToken");
+    Cookies.remove("userToken");
     notify("Logout Successfully");
     setTimeout(() => {
       navigate("/");

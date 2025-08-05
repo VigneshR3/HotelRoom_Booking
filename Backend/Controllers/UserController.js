@@ -44,6 +44,7 @@ const UserLogin = async (req, res) => {
             email: GetUser.email,
             username: GetUser.username,
             role: GetUser.role,
+            id:GetUser._id
           },
 
           process.env.TOKEN_SECRET_KEY
